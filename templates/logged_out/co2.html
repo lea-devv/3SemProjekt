@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}CO2 Data{% endblock %}
+
+{% block nav %}
+</li>
+    <a class="nav-link" href="/co2">CO2 Data</a>
+<li class="nav-item">
+    <a class="nav-link" href="/login">Login</a>
+{% endblock %}
+
+{% block content %}
+<body>
+    <main style="padding:4%" class="flex-grow-1">
+        {% if graph %}
+            <div class="mb-3">
+                <h2>CO2 Levels Over Time</h2>
+                <img src="data:image/png;base64,{{ graph }}" alt="CO2 Levels Graph" class="img-fluid">
+            </div>
+        {% endif %}
+        
+        <div class="mb-3">
+            <h2>Recent CO2 Readings</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>CO2 Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                        <tr>
+                            <td>{{ row.datetime }}</td>
+                            <td>{{ row.co2 }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+
+{% endblock %}

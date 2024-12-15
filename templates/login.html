@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+
+{% block nav %}
+</li>
+    <a class="nav-link" href="/co2">CO2 Data</a>
+<li class="nav-item">
+    <a class="nav-link" href="/login">Login</a>
+{% endblock %}
+{% block content %}
+
+<body>
+    
+	
+
+    <div class= "fluid-content">
+    </div>
+	
+	<form action="#" method="post">
+		<div class="mb-3 m-4">
+			<label for="username">Username</label>
+			<input type="username" class="form-control" id="username" name="username" placeholder="Enter username" />
+		</div>
+		<div class="mb-3 m-4">
+			<label for="password">Password</label>
+			<input type="password" class="form-control" id="password" name="password" placeholder="Password" />
+		</div>
+		<button type="submit" class="btn btn-primary m-4">Login</button>
+	</form>
+</body>
+
+{% endblock %}
