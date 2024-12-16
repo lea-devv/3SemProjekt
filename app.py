@@ -108,6 +108,10 @@ def logout():
 @app.errorhandler(401)
 def page_not_found(e):
     return redirect(url_for("authentication"))
+    
+@app.errorhandler(404)
+def page_not_found(e):
+    return redirect(url_for("authentication"))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0')
