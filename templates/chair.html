@@ -22,6 +22,30 @@
         </div>
     </div>
     <br>
-    <p>{{ user_chair_data }}</p>
-</body>
-{% endblock %}
+    <div class="row">
+        <div class="col-md-12">
+            <table id="data" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Datetime</th>
+                        <th>Back Left</th>
+                        <th>Back Right</th>
+                        <th>Bottom Left</th>
+                        <th>Bottom Right</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in user_chair_data %}
+                    <tr>
+                        <td>{{ row.datetime }}</td>
+                        <td>{{ row.chair_back_left }}</td>
+                        <td>{{ row.chair_back_right }}</td>
+                        <td>{{ row.chair_bottom_left }}</td>
+                        <td>{{ row.chair_bottom_right }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </body>
+    {% endblock %}

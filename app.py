@@ -3,7 +3,7 @@ from flask_login import current_user, LoginManager, UserMixin, login_user, logou
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from data_generation import get_chair_data
-from data_visualization import show_user_chair_data
+#from data_visualization import show_user_chair_data
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.sqlite"

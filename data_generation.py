@@ -49,6 +49,7 @@ def get_chair_data(chair_rfid_uuid):
     select_query = f"""SELECT * FROM {table_name} 
         ORDER BY datetime DESC;"""
     
+    chair_data = []
     datetimes = []
     chair_back_left = []
     chair_back_right = []
@@ -62,15 +63,17 @@ def get_chair_data(chair_rfid_uuid):
         cur.execute(create_query)
         cur.execute(select_query)
 
-        rows = cur.fetchmany(1)
+        rows = cur.fetchmany(10)
         for row in reversed(rows):
-            datetimes.append(row[0])
-            chair_back_left.append(row[1])
-            chair_back_right.append(row[2])
-            chair_bottom_left.append(row[3])
-            chair_bottom_right.append(row[4])
-        return datetimes, chair_rfid_uuid, chair_back_left, chair_back_right, chair_bottom_left, chair_bottom_right
-        
+            chair_data.append({
+                'datetime': row[0],
+                'chair_back_left': row[1],
+                'chair_back_right': row[2],
+                'chair_bottom_left': row[3],
+                'chair_bottom_right': row[4],
+            })
+        return chair_data
+    
     except sqlite3.Error as sql_e:
         print(f"sqlite error occured: {sql_e}")
         conn.rollback()
