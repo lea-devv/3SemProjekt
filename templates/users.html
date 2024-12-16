@@ -1,2 +1,28 @@
 {% extends 'base.html' %}
 {% block title %}Users{% endblock %}
+
+{% block content %}
+<body>
+    <div class="row">
+        <div class="col-md-12">
+            <table id="user_table" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Username</th>
+                        <th>RFID UUID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.rfid_uuid }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </body>
+    {% endblock %}

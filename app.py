@@ -42,7 +42,11 @@ def index():
 @app.route("/users")
 @login_required
 def users():
-    return render_template('users.html')
+    users = Users.query.all()
+    for user in users:
+        print(user.rfid_uuid)
+    print(users)
+    return render_template('users.html', users=users)
 
 @app.route("/co2")
 def co2():
