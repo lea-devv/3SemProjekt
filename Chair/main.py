@@ -115,7 +115,7 @@ def data_logging():
         #battery_avg = read_average_adc(battery_adc)
         sleep(0.5)
         print(vibr_timer_state)
-        if chair_bottom_left_avg > 3000 or chair_bottom_right_avg > 3000 and vibr_timer_state is False:
+        if chair_bottom_left_avg > 3000 and vibr_timer_state is False:
             vibr_timer_state = True
             print("Waiting")
             vibr_timer.init(period=5000, mode=Timer.ONE_SHOT, callback=vibrate_chair)
