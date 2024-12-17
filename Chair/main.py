@@ -5,6 +5,7 @@ from time import sleep
 import ubinascii
 import machine
 import _thread
+import json
 
 vibr_timer_state = False
 
@@ -114,12 +115,12 @@ def data_logging():
         chair_bottom_right_avg = read_average_adc(chair_bottom_right_adc)
         #battery_avg = read_average_adc(battery_adc)
         sleep(0.5)
-        print(vibr_timer_state)
-        if chair_bottom_left_avg > 3000 and vibr_timer_state is False:
+        print(vibr_timer_state, chair_bottom_right_avg)
+        if chair_bottom_right_avg > 3000 and vibr_timer_state is False:
             vibr_timer_state = True
             print("Waiting")
             vibr_timer.init(period=5000, mode=Timer.ONE_SHOT, callback=vibrate_chair)
-        elif chair_bottom_left_avg < 3000:
+        elif chair_bottom_right_avg < 3000:
             vibr_timer_state = False
             vibr_timer.deinit()
 
@@ -137,8 +138,15 @@ while True:
                 print(uuid)
 
         if uuid is not None:
-            message = uuid, chair_back_left_avg, chair_back_right_avg, chair_bottom_left_avg, chair_bottom_right_avg
-            client.publish(b'chair_data', str(message))
+            message = {
+                "uuid": uuid,
+                "chair_back_left_avg": chair_back_left_avg,
+                "chair_back_right_avg": chair_back_right_avg,
+                "chair_bottom_left_avg": chair_bottom_left_avg,
+                "chair_bottom_right_avg": chair_bottom_right_avg
+                }
+            message_json = json.dumps(message)
+            client.publish(b'chair_data', str(message_json))
 
         battery_pct = (battery_avg - 1590) / 7.3 # ADC1590 = 0% og 1% = ADC7.3
         client.publish(b'battery_data', str(battery_pct))
