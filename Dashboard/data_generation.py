@@ -1,8 +1,9 @@
-#import paho.mqtt.client as mqtt
-#import paho.mqtt.publish as publish
+import paho.mqtt.client as mqtt
+from time import sleep
 import datetime
 import sqlite3
 import threading
+import json
 
 co2_value = None
 co2_data_location = None
@@ -29,13 +30,18 @@ def on_message(client, userdata, msg):
         co2_data_location, co2_value = co2_data.split(", ")
 
     if msg.topic == "chair_data":
-        chair_data = str(msg.payload.decode())
-        chair_rfid_uuid, chair_back_left, chair_back_right, chair_bottom_left, chair_bottom_right = chair_data.split(", ")
+        chair_data = json.loads(msg.payload.decode())
+        chair_rfid_uuid = chair_data["uuid"]
+        chair_back_left = chair_data["chair_back_left_avg"]
+        chair_back_right = chair_data["chair_back_right_avg"]
+        chair_bottom_left = chair_data["chair_bottom_left_avg"]
+        chair_bottom_right = chair_data["chair_bottom_right_avg"]
+        get_chair_data(chair_rfid_uuid, 0)
 
     
 ##############################################################
 #Takes the data recieved from mqtt and enters it into the databases
-def get_chair_data(chair_rfid_uuid):
+def get_chair_data(chair_rfid_uuid, amount=100):
 
     table_name = f'"{chair_rfid_uuid}"'
 
@@ -48,7 +54,7 @@ def get_chair_data(chair_rfid_uuid):
 
     select_query = f"""SELECT * FROM {table_name} 
         ORDER BY datetime DESC;"""
-    
+
     chair_data = []
     datetimes = []
     chair_back_left = []
@@ -63,7 +69,7 @@ def get_chair_data(chair_rfid_uuid):
         cur.execute(create_query)
         cur.execute(select_query)
 
-        rows = cur.fetchmany(10)
+        rows = cur.fetchmany(amount)
         for row in reversed(rows):
             chair_data.append({
                 'datetime': row[0],
@@ -118,10 +124,12 @@ def get_co2_data():
 
 def log_data():
     global co2_value, co2_data_location
-    global chair_user, chair_back_left, chair_back_right, chair_bottom_left, chair_bottom_right
+    global chair_rfid_uuid, chair_back_left, chair_back_right, chair_bottom_left, chair_bottom_right
     while True:
-        now = datetime.now()
+        sleep(5)
+        now = datetime.datetime.now()
         now = now.strftime("%d/%m/%y %H:%M:%S")
+
         try:
             conn = sqlite3.connect("./database/co2.sqlite")
             cur = conn.cursor()
@@ -143,11 +151,12 @@ def log_data():
         try:
             conn = sqlite3.connect("./database/chair.sqlite")
             cur = conn.cursor()
-            console_query = f"""INSERT INTO {co2_data_location}(
-                datetime, co2_data) VALUES(?, ?, ?)"""
-            if co2_value and co2_data_location is not None:
-                co2_data = (now, co2_value)
-                cur.execute(console_query, co2_data)
+            table_name = f'"{chair_rfid_uuid}"'
+            insert_query = f"""INSERT INTO {table_name} (
+                datetime, chair_back_left, chair_back_right, chair_bottom_left, chair_bottom_right) VALUES(?, ?, ?, ?, ?);"""
+            chair_data = now, chair_back_left, chair_back_right, chair_bottom_left, chair_bottom_right
+            if chair_data and chair_rfid_uuid is not None:
+                cur.execute(insert_query, chair_data)
                 conn.commit()
         except sqlite3.Error as sql_e:
             print(f"sqlite error occured: {sql_e}")
@@ -163,17 +172,16 @@ def desicions():
     ...
 
 ##############################################################
-"""
+
 #Starts a non-blocking loop for mqtt and starts a thread for logging the data
 mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 mqttc.on_connect = on_connect
 mqttc.on_message = on_message
 
-mqttc.connect("4.231.174.166", 1883, 60)
+mqttc.connect("192.168.2.2", 1883, 60)
 
 mqttc.loop_start()
 
 log_thread = threading.Thread(target=log_data, daemon=True)
 
 log_thread.start()
-"""

@@ -40,10 +40,10 @@ deactivate nondestructive
 if [ "${OSTYPE:-}" = "cygwin" ] || [ "${OSTYPE:-}" = "msys" ] ; then
     # transform D:\path\to\venv to /d/path/to/venv on MSYS
     # and to /cygdrive/d/path/to/venv on Cygwin
-    export VIRTUAL_ENV=$(cygpath 'C:\GitHub\3SemProjekt')
+    export VIRTUAL_ENV=$(cygpath 'C:\GitHub\3SemProjekt\Dashboard')
 else
     # use the path as-is
-    export VIRTUAL_ENV='C:\GitHub\3SemProjekt'
+    export VIRTUAL_ENV='C:\GitHub\3SemProjekt\Dashboard'
 fi
 
 _OLD_VIRTUAL_PATH="$PATH"
@@ -60,9 +60,9 @@ fi
 
 if [ -z "${VIRTUAL_ENV_DISABLE_PROMPT:-}" ] ; then
     _OLD_VIRTUAL_PS1="${PS1:-}"
-    PS1='(3SemProjekt) '"${PS1:-}"
+    PS1='(Dashboard) '"${PS1:-}"
     export PS1
-    VIRTUAL_ENV_PROMPT='(3SemProjekt) '
+    VIRTUAL_ENV_PROMPT='(Dashboard) '
     export VIRTUAL_ENV_PROMPT
 fi
 

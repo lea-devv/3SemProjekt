@@ -114,4 +114,4 @@ def page_not_found(e):
     return redirect(url_for("authentication"))
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', debug=True)
