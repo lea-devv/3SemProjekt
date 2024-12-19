@@ -21,4 +21,4 @@ def transfer_backup(backup_path, target_user, target_host, target_path):
 ''
 
 backup_database("./home/imamu/website/database/chair.sqlite", "./home/imamu/website/database_backup/chair_backup_sqlite")
-transfer_backup("./home/imamu/website/database_backup/chair_backup_sqlite", "martin/frago", "192.168.2.3", "C:\Users\frago\Documents\remote_backup")
+transfer_backup("./home/imamu/website/database_backup/chair_backup_sqlite", "martin", "192.168.2.4", "./home/martin/database_backup")
