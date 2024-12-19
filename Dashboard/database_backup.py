@@ -1,4 +1,3 @@
-import data_generation
 import sqlite3
 import subprocess
 def backup_database(source_db_path, backup_db_path):
@@ -19,6 +18,7 @@ def transfer_backup(backup_path, target_user, target_host, target_path):
     except subprocess.CalledProcessError as e:
         print(f"Error transferring backup: {e}")
 
+''
 
 backup_database("./home/imamu/website/database/chair.sqlite", "./home/imamu/website/database_backup/chair_backup_sqlite")
 transfer_backup("./home/imamu/website/database_backup/chair_backup_sqlite", "martin/frago", "192.168.2.3", "C:\Users\frago\Documents\remote_backup")
