@@ -173,15 +173,18 @@ def desicions():
 
 ##############################################################
 
-#Starts a non-blocking loop for mqtt and starts a thread for logging the data
-mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
-mqttc.on_connect = on_connect
-mqttc.on_message = on_message
+try:
+    #Starts a non-blocking loop for mqtt and starts a thread for logging the data
+    mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+    mqttc.on_connect = on_connect
+    mqttc.on_message = on_message
 
-mqttc.connect("192.168.2.2", 1883, 60)
+    mqttc.connect("192.168.2.2", 1883, 60)
 
-mqttc.loop_start()
+    mqttc.loop_start()
 
-log_thread = threading.Thread(target=log_data, daemon=True)
+    log_thread = threading.Thread(target=log_data, daemon=True)
 
-log_thread.start()
+    log_thread.start()
+except Exception as e:
+    print(f"Error occured: {e}")

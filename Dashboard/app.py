@@ -4,8 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from data_generation import get_chair_data
 
-#from data_visualization import show_user_chair_data
-
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.sqlite"
 app.config["SECRET_KEY"] = "grafisk_design"
@@ -71,7 +69,8 @@ def chair():
 
 # Register site
 @app.route('/register', methods=["GET", "POST"])
-@login_required
+#@login_required 
+#Delete this after creating the first user
 def register():
     if request.method == "POST":
         hashed_password = bcrypt.generate_password_hash(request.form.get("password")).decode('utf-8')
@@ -113,12 +112,6 @@ def page_not_found(e):
 @app.errorhandler(404)
 def page_not_found(e):
     return redirect(url_for("authentication"))
-
-
-
-
-
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
